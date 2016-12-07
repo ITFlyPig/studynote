@@ -33,7 +33,7 @@ addInterceptor:设置应用拦截器，主要用于设置公共参数，头信�
 addNetworkInterceptor：设置网络拦截器，主要用于重试或重写   
 一张图说明：
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/01.png)
+](http://upload-images.jianshu.io/upload_images/1458573-76f6b7798a26ec17.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 例如：初始请求http://baidu.com 会重定向1次到https://baidu.com 。
 则应用拦截器会执行1次，返回的是https的响应
@@ -56,7 +56,7 @@ addNetworkInterceptor：设置网络拦截器，主要用于重试或重写
 
 #### Okhttp的拦截机制
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/02.png)
+](http://upload-images.jianshu.io/upload_images/1458573-d7375161cda31f32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 **RetryAndFollowUpInterceptor做的事情：**    
 1. 创建StreamAllocation对象，为后面流程的执行准备条件。   
 2.处理重定向的HTTP响应。    
@@ -79,15 +79,15 @@ ConnectInterceptor通过StreamAllocation创建了HttpStream对象和RealConnecti
 最后便是返回Response。
 #### OKhttp的请求流程
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/03.png)
+](http://upload-images.jianshu.io/upload_images/1458573-79aa905da482f0e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 上图表示的是Okhttp的请求流程
 ****
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/05.png)
+](http://upload-images.jianshu.io/upload_images/1458573-b48f7b4793267b2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 上图表示的是请求的时序图
 ****
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/04.png)   
+](http://upload-images.jianshu.io/upload_images/1458573-fed46f02396b5bfe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)   
 上图表示的OKhttp的总体设计
 
 **一次网络请求执行的流程：**   
@@ -105,7 +105,7 @@ RealConnection resultConnection = findHealthyConnection(...)
 搜索可用的socket连接，在findHealthyConnection方法中使用findConnection来实际工作，findConnection的作用：查找连接池ConnectionPool中是否有可用的连接，有则返回连接，没有则新建连接。
 > 这里获得可用的Socket对象之后，会根据Connection创建HttpStream	
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/06.png)
+](http://img.blog.csdn.net/20161117224123754)
 
 8.发起请求是在Connection.connect()这里，实际执行是在HttpConnection.flush()这里进行一个刷入。这里重点应该关注一下sink和source，他们创建的默认方式都是依托于同一个socket：
 this.source = Okio.buffer(Okio.source(socket));
@@ -115,7 +115,7 @@ Source source = source((InputStream)socket.getInputStream(), (Timeout)timeout);
 Sink sink = sink((OutputStream)socket.getOutputStream(), (Timeout)timeout);
 9.得到连接后通过HttpStream就可以写入请求和读取返回body，是在HttpEngine.readResponse中读取的。readNetworkResponse方法的代码如下：
 > ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/07.png)
+](http://img.blog.csdn.net/20161118115127484)
 
 #### OkHttp重要的知识点
 ##### OkHttp之网络连接
@@ -153,7 +153,7 @@ Sink sink = sink((OutputStream)socket.getOutputStream(), (Timeout)timeout);
 
 #### OkHttp的缓存
 ![
-](file:///Users/wangyuelin/Documents/MyFile/markdown_pic/08.png)
+](http://upload-images.jianshu.io/upload_images/98641-4bd320d4e34af60a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 上图是浏览器的缓存机制
 在OkHttp中：  
 1. Okhttp的缓存是自动完成的，完全由服务器Header决定的，自己没有必要进行控制。网上热传的文章在Interceptor中手工添加缓存代码控制，它固然有用，但是属于Hack式的利用，违反了RFC文档标准，不建议使用，OkHttp的官方缓存控制在注释中。如果读者的需求是对象持久化，建议用文件储存或者数据库即可（比如realm）。  
